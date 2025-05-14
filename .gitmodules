@@ -1,0 +1,9 @@
+[submodule "nomos-example-uniswap"]
+	path = nomos-example-uniswap
+	url = git@github.com:logos-co/nomos-example-uniswap.git
+[submodule "nomos-example-blockscout"]
+	path = nomos-example-blockscout
+	url = git@github.com:logos-co/nomos-example-blockscout.git
+[submodule "nomos-example-uniswap-contracts"]
+	path = nomos-example-uniswap-contracts
+	url = git@github.com:logos-co/nomos-example-uniswap-contracts.git
