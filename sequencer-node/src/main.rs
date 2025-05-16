@@ -11,8 +11,6 @@ use reth_tracing::tracing::info;
 use executor_http_client::BasicAuthCredentials;
 use evm_sequencer_node::{Processor, NomosDa};
 
-const TESTNET_EXECUTOR: &str = "https://testnet.nomos.tech/node/3/";
-
 async fn process_blocks<Node: FullNodeComponents>(
     mut ctx: ExExContext<Node>,
     mut processor: Processor,
@@ -60,7 +58,7 @@ fn main() -> eyre::Result<()> {
     .unwrap()
     .run(|builder, _| {
         Box::pin(async move {
-            let url = std::env::var("NOMOS_EXECUTOR").unwrap_or(TESTNET_EXECUTOR.to_string());
+            let url = std::env::var("NOMOS_EXECUTOR").unwrap_or_default();
             let user = std::env::var("NOMOS_USER").unwrap_or_default();
             let password = std::env::var("NOMOS_PASSWORD").unwrap_or_default();
             let da = NomosDa::new(

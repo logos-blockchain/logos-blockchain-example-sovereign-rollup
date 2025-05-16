@@ -19,21 +19,60 @@ Additionally, the repository includes a fully functioning Uniswap example:
 - [Nomoswap: Uniswap Frontend](./nomos-example-uniswap/) - Web interface for interacting with the DEX
 - [Blockscout: Block Explorer](./nomos-example-blockscout/) - Block explorer for the rollup
 
+## Architecture
+
+```
++----------------+      +--------------+     +----------------+
+|   Sequencer    |----->|    Prover    |<----|   Light Node   |
+|    (EVM)       |      |   (Risc0)    |     |  (Verifier)    |
++----------------+      +--------------+     +----------------+
+        |                                            |
+        v                                            v
++----------------+                           +----------------+
+|  Nomos Node    |<--------------------------|  Consensus/DA  |
+|  (DA Layer)    |                           |  Verification  |
++----------------+                           +----------------+
+```
+
+The system works as follows:
+1. Sequencer processes transactions and sends blocks to the Nomos data availability layer
+2. Prover generates ZK proofs of block execution
+3. Light Node fetches blocks from the sequencer and verifies proofs
+4. Light Node confirms block data is available on Nomos
+
+
 ## Prerequisites
 
 - Rust
 - Cargo
+- Just
+- Risc0
 - Access to a Nomos node
 
 ## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/nomos-example-sovereign.git
+   git clone https://github.com/your-org/nomos-example-sovereign.git --recurse-submodules
    cd nomos-example-sovereign
    ```
 
-2. Build the components:
+2. Build zeth:
+   ```bash
+   cd zeth
+   just build
+   ```
+   GPU acceleration (Apple Metal and CUDA) is supported and greatly improves performance. To enable it, compile zeth appropriately with:
+   ```bash
+    just metal
+    ```
+    or 
+    ```bash
+    just cuda
+    ```
+
+
+2. Build the remaining components:
    ```bash
    cargo build --release
    ```
@@ -57,7 +96,7 @@ Environment variables:
 
 The sequencer exposes RPC endpoints on:
 - HTTP: http://localhost:8545
-- WebSocket: ws://localhost:8546
+- WebSocket: wss://localhost:8546
 
 ### 2. Start the Prover
 
@@ -81,16 +120,16 @@ Parameters:
 
 The prover service will be available at: http://localhost:8070
 
-### 3. Start the Light Node
+### 3. Start the Light Node [experimental]
 
-The light node validates proofs and verifies block data:
+The light node validates proofs and verifies block data. Please note that this is an experimental feature and may not be fully functional.
 
 ```bash
 cargo run --release --bin evm-lightnode -- \
   --rpc http://localhost:8545 \
   --ws-rpc wss://localhost:8546 \
   --prover-url http://localhost:8070 \
-  --nomos-node https://testnet.nomos.tech/node/3/ \
+  --nomos-node https://nomos.url \
   --batch-size 10 \
   --zeth-binary-dir /path/to/zeth
 ```
@@ -103,7 +142,7 @@ Parameters:
 - `--batch-size`: Number of blocks in a proof batch
 - `--zeth-binary-dir`: Path to the directory containing the zeth binary
 
-## Deploying Uniswap
+## Example Application: Deploying Uniswap
 
 Follow these steps to deploy and interact with Uniswap on the sovereign rollup:
 
@@ -127,23 +166,3 @@ Follow these steps to deploy and interact with Uniswap on the sovereign rollup:
 
 Each component's directory contains a detailed README with specific setup instructions.
 
-## Architecture
-
-```
-+----------------+      +----------------+      +----------------+
-|   Sequencer    |----->|     Prover     |----->|   Light Node   |
-|    (EVM)       |      |    (Risc0)     |      |  (Verifier)    |
-+----------------+      +----------------+      +----------------+
-        |                                               |
-        v                                               v
-+----------------+                           +----------------+
-|  Nomos Node    |<--------------------------|  Consensus     |
-|  (DA Layer)    |                           |  Verification  |
-+----------------+                           +----------------+
-```
-q
-The system works as follows:
-1. Sequencer processes transactions and sends blocks to the Nomos data availability layer
-2. Prover generates ZK proofs of block execution
-3. Light Node fetches blocks from the sequencer and verifies proofs
-4. Light Node confirms block data is available on Nomos

@@ -28,7 +28,7 @@ struct Args {
     #[clap(long, default_value = "http://localhost:8070")]
     prover_url: Url,
 
-    #[clap(long, default_value = TESTNET_EXECUTOR)]
+    #[clap(long)]
     nomos_node: Url,
 
     #[clap(long, default_value = "10")]
@@ -37,8 +37,6 @@ struct Args {
     #[clap(long)]
     zeth_binary_dir: Option<PathBuf>,
 }
-
-const TESTNET_EXECUTOR: &str = "https://testnet.nomos.tech/node/3/";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn error::Error>> {
