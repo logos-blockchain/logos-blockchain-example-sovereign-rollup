@@ -1,0 +1,28 @@
+[package]
+name = "evm-lightnode"
+edition = { workspace = true }
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+executor-http-client = { git = "https://github.com/logos-co/nomos", branch = "master" }
+tokio = { version = "1", features = ["full"] }
+crypto-bigint = { version = "0.5.5", features = ["serde"] }
+risc0-zkvm = { version = "2" }
+indexmap = { version = "1.9.3" }
+url = { version = "2" }
+hex = { version = "0.4" }
+futures = { version = "0.3" }
+kzgrs-backend = { git = "https://github.com/logos-co/nomos", branch = "master" }
+tempfile = "3.19.1"
+alloy         = { version = "0.13", features = ["full"] }
+lru = { version = "0.14" }
+nomos-core = { git = "https://github.com/logos-co/nomos", branch = "master" }
+reth.workspace = true
+anyhow = "1.0.98"
+tokio-stream = "0.1.17"
+evm-sequencer-node = { path = "../sequencer-node" }

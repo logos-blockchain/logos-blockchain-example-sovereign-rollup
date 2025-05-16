@@ -1,0 +1,16 @@
+[package]
+name = "evm-sequencer-node"
+edition = { workspace = true }
+
+[dependencies]
+eyre = { workspace = true }
+futures = { workspace = true }
+reth = { workspace = true }
+reth-ethereum = { workspace = true, features = ["full"] }
+reth-ethereum-primitives = { workspace = true }
+reth-tracing = { workspace = true }
+url = { version = "2" }
+kzgrs-backend = { git = "https://github.com/logos-co/nomos", branch = "master" }
+bincode = "1"
+executor-http-client = { git = "https://github.com/logos-co/nomos", branch = "master" }
+reqwest = "0.11"
