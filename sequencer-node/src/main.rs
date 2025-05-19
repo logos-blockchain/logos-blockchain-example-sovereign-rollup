@@ -51,6 +51,7 @@ fn main() -> eyre::Result<()> {
         "--dev.block-time=2s",
         "--http.addr=0.0.0.0",
         "--http.api=eth,net,web3,debug,trace,txpool", // Some might be unnecessary, but I guess
+        "--ws",
         "--ws.addr=0.0.0.0",
         "--ws.api=eth,net,web3,txpool",
         "--http.corsdomain=\"*\"", // Needed locally, probably needed here as well.

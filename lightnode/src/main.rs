@@ -22,7 +22,7 @@ struct Args {
     #[clap(long, default_value = "http://localhost:8545")]
     rpc: Url,
 
-    #[clap(long, default_value = "wss://localhost:8546")]
+    #[clap(long, default_value = "ws://localhost:8546")]
     ws_rpc: Url,
 
     #[clap(long, default_value = "http://localhost:8070")]
@@ -47,14 +47,16 @@ async fn main() -> Result<(), Box<dyn error::Error>> {
 
     fmt::fmt().with_env_filter(filter).with_target(false).init();
 
-    let zone_blocks = follow_sz(args.ws_rpc.clone()).await?;
+    let zone_blocks = follow_sz(args.ws_rpc.clone()).await.unwrap();
     let (tx, da_blobs) = tokio::sync::mpsc::channel::<BlobId>(MAX_BLOBS);
+    let username = std::env::var("NOMOS_USER").unwrap_or_default();
+    let password = std::env::var("NOMOS_PASSWORD").ok();
     tokio::spawn(check_blobs(
         NomosClient::new(
             args.nomos_node.clone(),
             Credentials {
-                username: "user".to_string(),
-                password: Some("password".to_string()),
+                username,
+                password,
             },
         ),
         tx
@@ -205,7 +207,6 @@ async fn follow_sz(
                 let heavy_task = tokio::task::spawn_blocking(move || encoder.encode(&data));
                 let encoded_data = heavy_task.await.unwrap().unwrap();
                 kzgrs_backend::common::build_blob_id(
-                    &encoded_data.aggregated_column_commitment,
                     &encoded_data.row_commitments,
                 )
             };
@@ -238,7 +239,7 @@ async fn check_blobs(
         if info.tip != current_tip {
             current_tip = info.tip;
             tracing::debug!("new tip: {:?}", info.tip);
-            let blobs = nomos_client.get_block(info.tip).await?.blobs;
+            let blobs = nomos_client.get_block(info.tip).await?.bl_blobs;
 
             if blobs.is_empty() {
                 tracing::debug!("No blobs found in block");
@@ -246,7 +247,7 @@ async fn check_blobs(
             }
 
             for blob in blobs {
-                sink.send(blob).await?;
+                sink.send(blob.id).await?;
             }
         } else {
             tracing::trace!("No new tip, sleeping...");
