@@ -7,3 +7,6 @@
 [submodule "nomos-example-uniswap-contracts"]
 	path = nomos-example-uniswap-contracts
 	url = git@github.com:logos-co/nomos-example-uniswap-contracts.git
+[submodule "zeth"]
+	path = zeth
+	url = https://github.com/logos-co/zeth.git
