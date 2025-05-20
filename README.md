@@ -6,7 +6,7 @@ This repository contains a proof-of-concept implementation of a Risc0-based sove
 
 This implementation consists of three main components:
 
-1. **Sequencer Node**: An Reth-based execution node that processes transactions and submits blocks to Nomos.
+1. **Sequencer Node**: A Reth-based execution node that processes transactions and submits blocks to Nomos.
 2. **Prover**: Generates zero-knowledge proofs for block execution, ensuring the correctness of state transitions.
 3. **Light Node**: Verifies proofs and block data, enabling trustless verification of the rollup state.
 
