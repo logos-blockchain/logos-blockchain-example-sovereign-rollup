@@ -1,3 +1,6 @@
+# TUTORIAL BRANCH
+This branch contains a "skeleton" of the Nomos Sovereign Rollup example. Files in repository have been emptied of all content except for some imports at the top. It is intended to be used only in conjunction with the Sovereign ZK Rollup tutorial on Nomos.
+
 # Nomos Sovereign Rollup Example
 
 This repository contains a proof-of-concept implementation of a Risc0-based sovereign rollup showcased by Nomos during IFT All-Hands 2025 in Split. The system demonstrates a complete end-to-end sovereign rollup architecture with EVM compatibility.
